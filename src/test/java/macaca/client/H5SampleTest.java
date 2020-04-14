@@ -1,29 +1,26 @@
 package macaca.client;
 
 import com.alibaba.fastjson.JSONObject;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.*;
 
 
 public class H5SampleTest {
     MacacaClient driver = new MacacaClient();
 
-    @Before
-    public void setUp() throws Exception {
-        // platform: android or ios
-        String platform = "android";
 
-        /*
-           Desired Capabilities are used to configure webdriver when initiating the session.
-           Document URL: https://macacajs.github.io/desired-caps.html
-         */
+    @BeforeEach
+    public void setUp() throws Exception {
+
         JSONObject porps = new JSONObject();
-        porps.put("platformName", platform);
+        porps.put("autoAcceptAlerts", true);
         porps.put("browserName", "Chrome");
+        porps.put("platformName", "desktop"); // android or ios
+        porps.put("javascriptEnabled", true);
+        porps.put("platform", "ANY");
         JSONObject desiredCapabilities = new JSONObject();
         desiredCapabilities.put("desiredCapabilities", porps);
-        driver.initDriver(desiredCapabilities);
+        driver.initDriver(desiredCapabilities)
+                .maximize();
     }
 
     @Test
@@ -31,18 +28,14 @@ public class H5SampleTest {
 
         System.out.println("------------#1 h5 web test-------------------");
 
-        /*
         driver.get("http://www.baidu.com");
-        driver.elementById("index-kw").sendKeys("macaca");
-        driver.elementById("index-bn").click();
-        driver.sleep(5000);
-        String source = driver.source();
-        Assert.assertThat(source, containsString("macaca"));
-        */
+        String source = driver.title();
+        Assertions.assertEquals(source,"百度一下，你就知道");
+
     }
 
-    @After
+    @AfterEach
     public void tearDown() throws Exception {
-        driver.quit();
+//        driver.quit();
     }
 }
